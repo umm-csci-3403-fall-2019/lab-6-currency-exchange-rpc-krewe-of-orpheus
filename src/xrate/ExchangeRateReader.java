@@ -1,5 +1,9 @@
 package xrate;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
 import java.io.*;
 import java.net.URL;
 import java.util.Properties;
@@ -10,6 +14,8 @@ import java.util.Properties;
 public class ExchangeRateReader {
 
     private String accessKey;
+
+    private String baseURL;
 
     /**
      * Construct an exchange rate reader using the given base URL. All requests
@@ -30,8 +36,8 @@ public class ExchangeRateReader {
          * provided `baseURL` in a field so it will be accessible later.
          */
 
-        // TODO Your code here
 
+	this.baseURL = baseURL;
         // Reads the access keys from `etc/access_keys.properties`
         readAccessKeys();
     }
@@ -83,16 +89,48 @@ public class ExchangeRateReader {
      */
     public float getExchangeRate(String currencyCode, int year, int month, int day) throws IOException {
         // TODO Your code here
+        String url = baseURL;
+        url += year +"-" + pad(month) + "-" + pad(day);
+        url += "?access_key=" + accessKey;
+        url += "&symbols=" + currencyCode;
+        System.out.println(url);
+
+        URL fixer = new URL(url);
+        InputStream inputStream = fixer.openStream();
+        InputStreamReader inputReader = new InputStreamReader(inputStream);
+        JsonParser parser = new JsonParser();
+        JsonObject result = parser.parse(inputReader).getAsJsonObject();
+
+        System.out.println(result);
 
         // Remove the next line when you've implemented this method.
-        throw new UnsupportedOperationException();
+        return getRate(result,currencyCode);
+    }
+
+    /**
+     * converts a positive int into a string, padding to minimum two digits.
+     * @param n the inputted number
+     * @return the padded string
+     */
+    private static String pad(int n){
+        String num;
+        if (n<10){
+            num = "0" + n;
+        }else {
+            num = ""+n;
+        }
+        return num;
+    }
+
+    private static float getRate(JsonObject ratesInfo, String currency){
+        return ratesInfo.getAsJsonObject("rates").get(currency).getAsFloat();
     }
 
     /**
      * Get the exchange rate of the first specified currency against the second
      * on the specified date.
      * 
-     * @param fromCurrency
+     * param fromCurrency
      *            the currency code we're exchanging *from*
      * @param toCurrency
      *            the currency code we're exchanging *to*
