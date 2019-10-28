@@ -88,7 +88,6 @@ public class ExchangeRateReader {
      * @throws IOException if there are problems reading from the server
      */
     public float getExchangeRate(String currencyCode, int year, int month, int day) throws IOException {
-        // TODO Your code here
         String url = baseURL;
         url += year +"-" + pad(month) + "-" + pad(day);
         url += "?access_key=" + accessKey;
@@ -101,9 +100,8 @@ public class ExchangeRateReader {
         JsonParser parser = new JsonParser();
         JsonObject result = parser.parse(inputReader).getAsJsonObject();
 
-        System.out.println(result);
+        //System.out.println(result);
 
-        // Remove the next line when you've implemented this method.
         return getRate(result,currencyCode);
     }
 
@@ -146,9 +144,12 @@ public class ExchangeRateReader {
     public float getExchangeRate(
             String fromCurrency, String toCurrency,
             int year, int month, int day) throws IOException {
-        // TODO Your code here
 
-        // Remove the next line when you've implemented this method.
-        throw new UnsupportedOperationException();
+        if(fromCurrency.equals("EUR")){
+            return getExchangeRate(toCurrency,year,month,day);
+        }else if(toCurrency.equals("EUR")){
+            return 1/getExchangeRate(fromCurrency,year,month,day);
+        }
+        return getExchangeRate(fromCurrency,year,month,day)/getExchangeRate(toCurrency,year,month,day);
     }
 }
