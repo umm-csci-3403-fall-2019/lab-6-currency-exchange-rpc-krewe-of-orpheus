@@ -53,4 +53,32 @@ public class ExchangeRateTest {
         float rate = xrReader.getExchangeRate("USD", "GBP", 2010, 6, 25);
         assertEquals(1.4986571073532104, rate, DELTA);
     }
+
+    @Test
+    public void checkEURvsGBP20191029online() throws IOException {
+        ExchangeRateReader xrReader = new ExchangeRateReader("http://data.fixer.io/api/");
+        float rate = xrReader.getExchangeRate("EUR", "GBP", 2019, 10, 29);
+        assertEquals(0.862018, rate, DELTA);
+    }
+
+    @Test
+    public void checkGBPvsEUR20191029online() throws IOException {
+        ExchangeRateReader xrReader = new ExchangeRateReader("http://data.fixer.io/api/");
+        float rate = xrReader.getExchangeRate("GBP", "EUR", 2019, 10, 29);
+        assertEquals(1/0.862018, rate, DELTA);
+    }
+
+    @Test
+    public void checkGBPvsGBP20191029online() throws IOException {
+        ExchangeRateReader xrReader = new ExchangeRateReader("http://data.fixer.io/api/");
+        float rate = xrReader.getExchangeRate("GBP", "GBP", 2019, 10, 29);
+        assertEquals(1, rate, DELTA);
+    }
+
+    @Test
+    public void checkEURvsEUR20191029online() throws IOException {
+        ExchangeRateReader xrReader = new ExchangeRateReader("http://data.fixer.io/api/");
+        float rate = xrReader.getExchangeRate("EUR", "EUR", 2019, 10, 29);
+        assertEquals(1, rate, DELTA);
+    }
 }
