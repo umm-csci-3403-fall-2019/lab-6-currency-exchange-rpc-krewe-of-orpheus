@@ -94,15 +94,18 @@ public class ExchangeRateReader {
         url += "&symbols=" + currencyCode;
         System.out.println(url);
 
+        JsonObject result = getJson(url);
+
+        return getRate(result,currencyCode);
+    }
+
+    private JsonObject getJson(String url) throws IOException {
         URL fixer = new URL(url);
         InputStream inputStream = fixer.openStream();
         InputStreamReader inputReader = new InputStreamReader(inputStream);
         JsonParser parser = new JsonParser();
         JsonObject result = parser.parse(inputReader).getAsJsonObject();
-
-        //System.out.println(result);
-
-        return getRate(result,currencyCode);
+        return result;
     }
 
     /**
