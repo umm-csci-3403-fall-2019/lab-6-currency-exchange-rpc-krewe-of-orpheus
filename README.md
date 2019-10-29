@@ -7,7 +7,8 @@ resource or service provided by the server.  A good example would be a web-serve
 providing web-pages to multiple browsers on multiple computers.  
 
 The term **client-server** refers to the configuration of the service provider and
-service consumer.  It does not require multiple machines. It is possible for the same
+service consumer.
+It does not require multiple machines. It is possible for the same
 computer to act as server and as client.
 
 This lab illustrates the encapsulation of a
